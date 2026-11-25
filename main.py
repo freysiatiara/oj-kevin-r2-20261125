@@ -15,14 +15,22 @@ JOKE = (
 )
 
 
-def main() -> None:
-    text = JOKE
+def _validate_entry(text):
+    if not isinstance(text, str):
+        raise ValueError("entry must be a string")
     if not (1 <= len(text) <= 200):
         raise ValueError("entry must be 1-200 characters, got %d" % len(text))
+    if not text.strip():
+        raise ValueError("entry must not be only whitespace")
     if "\n" in text or "\r" in text:
         raise ValueError("entry must be a single line")
     if text != text.strip():
         raise ValueError("entry must not have leading or trailing whitespace")
+
+
+def main() -> None:
+    text = JOKE
+    _validate_entry(text)
 
     out_path = os.environ.get("ENTRY_OUTPUT", "/output/entry.txt")
     out_dir = os.path.dirname(out_path)
